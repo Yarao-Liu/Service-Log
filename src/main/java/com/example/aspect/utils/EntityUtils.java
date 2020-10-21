@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -67,7 +64,6 @@ public class EntityUtils {
                 }
             }
         }
-
         return classSet;
     }
 
@@ -142,12 +138,45 @@ public class EntityUtils {
         return null;
     }
 
+    public static Set getPackageAllClasses(String packageName) {
+        Set<Class<?>> classes;
+        try {
+            classes = getClasses(packageName);
+        } catch (IOException ignored) {
+            return null;
+        }
+        return classes;
+    }
+
+    /**
+     * 将object还原
+     * @param args
+     * @param packageName
+     * @return
+     */
+    public static ArrayList<Object> reBuildClass(Object[] args, String packageName) {
+        ArrayList<Object> objects = new ArrayList<>();
+        Set packageAllClasses = EntityUtils.getPackageAllClasses(packageName);
+        Iterator iterator = packageAllClasses.iterator();
+        //可以组装 describe 和 details
+        for (int i = 0; i < args.length; i++) {
+            log.error("2: " + args[i]);
+            log.error("3: " + args[i].getClass());
+            //param的参数类型
+            while (iterator.hasNext()){
+                Object next = iterator.next();
+                if (args[i].getClass().equals(next)){
+                    Object o = args[i].getClass().cast(args[i]);
+                    objects.add(o);
+                }
+            }
+        }
+        return objects;
+    }
     /**
      * 调用示例
-     *
-     * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SysRecord sysRecord = new SysRecord();
         Class aClass = assertClass(sysRecord, "com.example.aspect.po");
         System.out.println(aClass);

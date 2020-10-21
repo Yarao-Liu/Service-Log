@@ -2,8 +2,8 @@ package com.example.aspect.annotation;
 
 /**
  * @author Mr.Liu
+ * @Description 控制器方法的类型
  */
-
 public enum MethodType {
     /**测试*/
     TEST,
