@@ -18,8 +18,6 @@ import static cn.hutool.core.util.ClassUtil.getClassLoader;
  * //TODO
  *
  * @author liuyarao
- * @vesion 1.0
- * @date 2020/10/19
  * @since jdk1.8
  */
 @Slf4j
@@ -28,7 +26,10 @@ public class EntityUtils {
     }
 
     /**
-     * 获取某个包下的所有类
+     * 获取包下所有类的全类名
+     * @param packageName 要获取所有类的包的包名
+     * @return Set
+     * @throws IOException IO异常
      */
     public static Set<Class<?>> getClasses(String packageName) throws IOException {
         Set<Class<?>> classSet = new HashSet<>();
@@ -67,6 +68,12 @@ public class EntityUtils {
         return classSet;
     }
 
+    /**
+     * 扫描包名/包路径下所有类的全类名
+     * @param classSet 存储工具集
+     * @param packagePath 包路径
+     * @param packageName 包名称
+     */
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName) {
         File[] files = new File(packagePath).listFiles(file -> (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory());
         if (files != null) {
@@ -94,7 +101,9 @@ public class EntityUtils {
     }
 
     /**
-     * 加载类
+     *  加载类
+     * @param className 加载类的类名
+     * @param isInitialized 是否初始化类
      */
     private static Class<?> loadClass(String className, boolean isInitialized) {
         Class<?> cls;
@@ -108,18 +117,27 @@ public class EntityUtils {
 
     /**
      * 加载类（默认将初始化类）
+     * @param className 加载类的类名
      */
     private static Class<?> loadClass(String className) {
         return loadClass(className, true);
     }
 
+    /**
+     * 真正执行addClass操作
+     * @param classSet 存储所有的类信息
+     * @param className 添加的全类名
+     */
     private static void doAddClass(Set<Class<?>> classSet, String className) {
         Class<?> cls = loadClass(className, false);
         classSet.add(cls);
     }
 
     /**
-     * assertClass 判断是否为自定义类，是返回类名，否返回null
+     * 判断是否为自定义类，是返回类名，否返回null
+     * @param obj 传入的参数
+     * @param packageName 扫描的包名
+     * @return 返回obj的类型信息
      */
     public static Class assertClass(Object obj, String packageName) {
         try {
@@ -138,6 +156,11 @@ public class EntityUtils {
         return null;
     }
 
+    /**
+     *  异常处理,异常不返回给调用端
+     * @param packageName 扫描的包名
+     * @return  包下所有的全类名
+     */
     public static Set getPackageAllClasses(String packageName) {
         Set<Class<?>> classes;
         try {
@@ -149,10 +172,10 @@ public class EntityUtils {
     }
 
     /**
-     * 将object还原
-     * @param args
-     * @param packageName
-     * @return
+     *将object还原为原来的Class
+     * @param args  请求的参数
+     * @param packageName 加载的包名
+     * @return ArrayList 全类名的list
      */
     public static ArrayList<Object> reBuildClass(Object[] args, String packageName) {
         ArrayList<Object> objects = new ArrayList<>();
@@ -160,8 +183,8 @@ public class EntityUtils {
         Iterator iterator = packageAllClasses.iterator();
         //可以组装 describe 和 details
         for (int i = 0; i < args.length; i++) {
-            log.error("2: " + args[i]);
-            log.error("3: " + args[i].getClass());
+            log.error("rebuild: " + args[i]);
+            log.error("rebuild: " + args[i].getClass());
             //param的参数类型
             while (iterator.hasNext()){
                 Object next = iterator.next();
@@ -174,7 +197,8 @@ public class EntityUtils {
         return objects;
     }
     /**
-     * 调用示例
+     *
+     * @param args 无意义
      */
     public static void main(String[] args) {
         SysRecord sysRecord = new SysRecord();

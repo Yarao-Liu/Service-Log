@@ -36,11 +36,11 @@ public class SysAspect {
         String packageName = "com.example.aspect.po";
 
         ArrayList<Object> reBuildClass = EntityUtils.reBuildClass(args,packageName);
-        System.out.println(parameterNames[0]);
+        log.error("doBefore: "+parameterNames[0]);
         if (reBuildClass.size()>0){
-            System.out.println(reBuildClass);
+            log.error("doBefore: "+reBuildClass.toString());
         }else {
-            System.out.println(args[0]);
+            log.error("doBefore: "+args[0].getClass());
         }
     }
     @After("logAspect()")
@@ -49,13 +49,13 @@ public class SysAspect {
         //未通过注解设置method_name
         if ("UNKNOWN".equals(sysLog.METHOD())) {
             String method = sysLog.METHOD();
-            log.error("8: annotation: " + method);
+            log.error("doAfter: " + method);
             String name = ((MethodSignature) joinPoint.getSignature()).getMethod().getName();
-            log.error("9: aop: " + name);
+            log.error("doAfter: " + name);
         }
-        log.error("10: " + sysLog.METHOD());
-        log.error("11: " + sysLog.DESCRIBE());
-        log.error("12: " + sysLog.TYPE());
+        log.error("doAfter: " + sysLog.METHOD());
+        log.error("doAfter: " + sysLog.DESCRIBE());
+        log.error("doAfter: " + sysLog.TYPE());
     }
 
     @AfterReturning("logAspect()")
