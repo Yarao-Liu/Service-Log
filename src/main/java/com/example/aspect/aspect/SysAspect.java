@@ -3,6 +3,7 @@ package com.example.aspect.aspect;
 import cn.hutool.core.bean.BeanUtil;
 import com.example.aspect.annotation.SysLog;
 import com.example.aspect.po.User;
+import com.example.aspect.utils.CommonUtils;
 import com.example.aspect.utils.EntityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -13,9 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -36,11 +35,16 @@ public class SysAspect {
         String packageName = "com.example.aspect.po";
 
         ArrayList<Object> reBuildClass = EntityUtils.reBuildClass(args,packageName);
-        log.error("doBefore: "+parameterNames[0]);
+        log.warn("doBefore:"+ Arrays.toString(args));
+        log.warn("doBefore: "+ Arrays.toString(parameterNames));
         if (reBuildClass.size()>0){
-            log.error("doBefore: "+reBuildClass.toString());
+            log.warn("doBefore: "+reBuildClass.toString());
+        }else if (EntityUtils.isPrimitive(args[0])){
+            //字符串或基本数据类型及其封装类//理论上强制类型转换即可
+            HashMap<String, Object> hashMap = CommonUtils.Array2Map(parameterNames, args);
+            System.out.println(hashMap);
         }else {
-            log.error("doBefore: "+args[0].getClass());
+            log.error("UNKNOWN DATA TYPE......");
         }
     }
     @After("logAspect()")
@@ -49,13 +53,13 @@ public class SysAspect {
         //未通过注解设置method_name
         if ("UNKNOWN".equals(sysLog.METHOD())) {
             String method = sysLog.METHOD();
-            log.error("doAfter: " + method);
+            log.warn("doAfter: " + method);
             String name = ((MethodSignature) joinPoint.getSignature()).getMethod().getName();
-            log.error("doAfter: " + name);
+            log.warn("doAfter: " + name);
         }
-        log.error("doAfter: " + sysLog.METHOD());
-        log.error("doAfter: " + sysLog.DESCRIBE());
-        log.error("doAfter: " + sysLog.TYPE());
+        log.warn("doAfter: " + sysLog.METHOD());
+        log.warn("doAfter: " + sysLog.DESCRIBE());
+        log.warn("doAfter: " + sysLog.TYPE());
     }
 
     @AfterReturning("logAspect()")

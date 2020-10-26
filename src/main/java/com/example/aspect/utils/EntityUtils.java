@@ -1,6 +1,7 @@
 package com.example.aspect.utils;
 
 import com.example.aspect.po.SysRecord;
+import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,6 +28,7 @@ public class EntityUtils {
 
     /**
      * 获取包下所有类的全类名
+     *
      * @param packageName 要获取所有类的包的包名
      * @return Set
      * @throws IOException IO异常
@@ -70,7 +72,8 @@ public class EntityUtils {
 
     /**
      * 扫描包名/包路径下所有类的全类名
-     * @param classSet 存储工具集
+     *
+     * @param classSet    存储工具集
      * @param packagePath 包路径
      * @param packageName 包名称
      */
@@ -101,8 +104,9 @@ public class EntityUtils {
     }
 
     /**
-     *  加载类
-     * @param className 加载类的类名
+     * 加载类
+     *
+     * @param className     加载类的类名
      * @param isInitialized 是否初始化类
      */
     private static Class<?> loadClass(String className, boolean isInitialized) {
@@ -117,6 +121,7 @@ public class EntityUtils {
 
     /**
      * 加载类（默认将初始化类）
+     *
      * @param className 加载类的类名
      */
     private static Class<?> loadClass(String className) {
@@ -125,7 +130,8 @@ public class EntityUtils {
 
     /**
      * 真正执行addClass操作
-     * @param classSet 存储所有的类信息
+     *
+     * @param classSet  存储所有的类信息
      * @param className 添加的全类名
      */
     private static void doAddClass(Set<Class<?>> classSet, String className) {
@@ -135,7 +141,8 @@ public class EntityUtils {
 
     /**
      * 判断是否为自定义类，是返回类名，否返回null
-     * @param obj 传入的参数
+     *
+     * @param obj         传入的参数
      * @param packageName 扫描的包名
      * @return 返回obj的类型信息
      */
@@ -157,9 +164,10 @@ public class EntityUtils {
     }
 
     /**
-     *  异常处理,异常不返回给调用端
+     * 异常处理,异常不返回给调用端
+     *
      * @param packageName 扫描的包名
-     * @return  包下所有的全类名
+     * @return 包下所有的全类名
      */
     public static Set getPackageAllClasses(String packageName) {
         Set<Class<?>> classes;
@@ -172,8 +180,9 @@ public class EntityUtils {
     }
 
     /**
-     *将object还原为原来的Class
-     * @param args  请求的参数
+     * 将object还原为原来的Class
+     *
+     * @param args        请求的参数
      * @param packageName 加载的包名
      * @return ArrayList 全类名的list
      */
@@ -183,26 +192,41 @@ public class EntityUtils {
         Iterator iterator = packageAllClasses.iterator();
         //可以组装 describe 和 details
         for (int i = 0; i < args.length; i++) {
-            log.error("rebuild: " + args[i]);
-            log.error("rebuild: " + args[i].getClass());
+            log.warn("rebuild: " + args[i]);
+            log.warn("rebuild: " + args[i].getClass());
             //param的参数类型
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Object next = iterator.next();
-                if (args[i].getClass().equals(next)){
+                if (args[i].getClass().equals(next)) {
                     Object o = args[i].getClass().cast(args[i]);
                     objects.add(o);
+                    System.out.println(o);
                 }
             }
         }
         return objects;
     }
+
+    public static boolean isPrimitive(Object obj) {
+        if (obj instanceof String) {
+            return true;
+        }
+            try {
+                return ((Class<?>) obj.getClass().getField("TYPE").get(null)).isPrimitive();
+            } catch (Exception e) {
+                return false;
+            }
+    }
     /**
-     *
      * @param args 无意义
      */
     public static void main(String[] args) {
         SysRecord sysRecord = new SysRecord();
         Class aClass = assertClass(sysRecord, "com.example.aspect.po");
         System.out.println(aClass);
+        Double d = new Double(0.3);
+        String a = new String("abc");
+        boolean primitive = isPrimitive(a);
+        System.out.println(primitive);
     }
 }
