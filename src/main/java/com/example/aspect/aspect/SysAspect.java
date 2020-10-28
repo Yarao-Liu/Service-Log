@@ -41,8 +41,8 @@ public class SysAspect {
             log.warn("doBefore: "+reBuildClass.toString());
         }else if (EntityUtils.isPrimitive(args[0])){
             //字符串或基本数据类型及其封装类//理论上强制类型转换即可
-            HashMap<String, Object> hashMap = CommonUtils.Array2Map(parameterNames, args);
-            System.out.println(hashMap);
+            ArrayList<String> paramString = EntityUtils.param2String(args);
+            System.out.println(paramString);
         }else {
             log.error("UNKNOWN DATA TYPE......");
         }

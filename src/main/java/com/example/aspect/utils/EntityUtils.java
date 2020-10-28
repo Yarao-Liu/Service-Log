@@ -200,7 +200,6 @@ public class EntityUtils {
                 if (args[i].getClass().equals(next)) {
                     Object o = args[i].getClass().cast(args[i]);
                     objects.add(o);
-                    System.out.println(o);
                 }
             }
         }
@@ -217,6 +216,17 @@ public class EntityUtils {
                 return false;
             }
     }
+    public static String Obj2String(Object obj) {
+        return String.valueOf(obj);
+    }
+    public static ArrayList<String> param2String(Object[] params){
+        ArrayList<String> paramlist = new ArrayList<>();
+        for (int i=0;i<params.length;i++){
+            paramlist.add((String) params[i]);
+        }
+        return paramlist;
+    }
+
     /**
      * @param args 无意义
      */
@@ -228,5 +238,10 @@ public class EntityUtils {
         String a = new String("abc");
         boolean primitive = isPrimitive(a);
         System.out.println(primitive);
+        int c=10;
+
+        String s = Obj2String(d);
+        System.out.println(s);
+
     }
 }
