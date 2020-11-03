@@ -1,14 +1,10 @@
 package com.example.aspect.aspect;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.example.aspect.annotation.SysLog;
-import com.example.aspect.po.User;
-import com.example.aspect.utils.CommonUtils;
 import com.example.aspect.utils.EntityUtils;
+import com.example.aspect.annotation.SysLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;

@@ -1,7 +1,6 @@
 package com.example.aspect.utils;
 
-import com.example.aspect.po.SysRecord;
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
+import com.example.aspect.po.BaseRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -231,8 +230,8 @@ public class EntityUtils {
      * @param args 无意义
      */
     public static void main(String[] args) {
-        SysRecord sysRecord = new SysRecord();
-        Class aClass = assertClass(sysRecord, "com.example.aspect.po");
+        BaseRecord baseRecord = new BaseRecord();
+        Class aClass = assertClass(baseRecord, "com.example.aspect.po");
         System.out.println(aClass);
         Double d = new Double(0.3);
         String a = new String("abc");

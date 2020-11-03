@@ -1,6 +1,6 @@
 package com.example.aspect.controller;
 
-import com.example.aspect.annotation.MethodType;
+import com.example.aspect.aspect.MethodType;
 import com.example.aspect.annotation.SysLog;
 import com.example.aspect.po.User;
 import com.example.aspect.service.TestService;

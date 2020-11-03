@@ -1,24 +1,13 @@
 package com.example.aspect.po;
 
-import lombok.Data;
-
-import java.util.Date;
-
 /**
  * @author Mr.Liu
  */
-@Data
-public class SysRecord {
+public class SysRecord extends BaseRecord {
 
-    private String id;
 
-    private String methodName;
-
-    private String type;
-
-    private String details;
-
-    private String describe;
-
-    private Date date=new Date();
+    //自定义属性
+    //操作时间
+    //操作者
+    //等等
 }
