@@ -16,4 +16,12 @@ public class SysRecord extends BaseRecord {
      * 操作者
      */
     private String operationUser;
+
+    @Override
+    public String toString() {
+        return "SysRecord{" +super.toString()+
+                "operationTime='" + operationTime + '\'' +
+                ", operationUser='" + operationUser + '\'' +
+                '}';
+    }
 }

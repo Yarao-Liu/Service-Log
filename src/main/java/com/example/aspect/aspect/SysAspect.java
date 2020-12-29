@@ -1,5 +1,7 @@
 package com.example.aspect.aspect;
 
+import com.example.aspect.po.SysRecord;
+import com.example.aspect.utils.RandomUtils;
 import com.example.aspect.utils.ReflectionUtils;
 import com.example.aspect.annotation.SysLog;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +42,7 @@ public class SysAspect {
 
         if (reBuildClass.size()>0){
             log.warn("doBefore: "+reBuildClass.toString());
-        }else if (ReflectionUtils.isPrimitive(args[0])){
-            //字符串或基本数据类型及其封装类//理论上强制类型转换即可
-            ArrayList<String> paramString = ReflectionUtils.param2String(args);
-            System.out.println(paramString);
-        }else {
+        } else {
             log.error("UNKNOWN DATA TYPE......");
         }
     }
@@ -61,6 +59,16 @@ public class SysAspect {
         log.warn("doAfter: " + sysLog.METHOD());
         log.warn("doAfter: " + sysLog.DESCRIBE());
         log.warn("doAfter: " + sysLog.TYPE());
+        SysRecord sysRecord = new SysRecord();
+        sysRecord.setId(RandomUtils.randomString8());
+        sysRecord.setOperationTime("now");
+        sysRecord.setOperationUser("I");
+        sysRecord.setDetails(sysLog.DETAILS());
+        sysRecord.setType(sysLog.TYPE());
+        sysRecord.setMethodName(sysLog.METHOD());
+        sysRecord.setDescribe(sysLog.DESCRIBE());
+
+        System.out.println(sysRecord);
     }
 
     @AfterReturning("logAspect()")

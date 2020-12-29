@@ -1,11 +1,13 @@
 package com.example.aspect.utils;
 
 import com.example.aspect.po.BaseRecord;
+import com.example.aspect.po.SysRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -185,6 +187,7 @@ public class ReflectionUtils {
      * @return ArrayList 全类名的list
      */
     public static ArrayList<Object> reBuildClass(Object[] args, String packageName) {
+
         ArrayList<Object> objects = new ArrayList<>();
         Set packageAllClasses = ReflectionUtils.getPackageAllClasses(packageName);
         Iterator iterator = packageAllClasses.iterator();
@@ -195,9 +198,13 @@ public class ReflectionUtils {
             //param的参数类型
             while (iterator.hasNext()) {
                 Object next = iterator.next();
-                if (args[i].getClass().equals(next)) {
+                if (isPrimitive(args[i])){
+                    objects.add(String.valueOf(args[i]));
+                    break;
+                }else if (args[i].getClass().equals(next)) {
                     Object o = args[i].getClass().cast(args[i]);
                     objects.add(o);
+                    break;
                 }
             }
         }
@@ -234,9 +241,12 @@ public class ReflectionUtils {
      * @param params 参数
      * @return ArrayList<String>
      */
-    public static ArrayList<String> param2String(Object[] params){
+    public static ArrayList<String> param2String(Object[] params) throws NoSuchFieldException {
         ArrayList<String> paramlist = new ArrayList<>();
         for (int i=0;i<params.length;i++){
+            Field username = params.getClass().getField("username");
+            String s = username.toString();
+            System.out.println(s);
             paramlist.add((String) params[i]);
         }
         return paramlist;
@@ -247,7 +257,7 @@ public class ReflectionUtils {
      * @param args 无意义
      */
     public static void main(String[] args) {
-        BaseRecord baseRecord = new BaseRecord();
+        SysRecord baseRecord = new SysRecord();
         Class aClass = assertClass(baseRecord, "com.example.aspect.po");
         System.out.println(aClass);
 
@@ -257,9 +267,7 @@ public class ReflectionUtils {
         boolean primitive = isPrimitive(a);
         System.out.println(primitive);
         int c=10;
-
         String s = obj2String(d);
         System.out.println(s);
-
     }
 }
