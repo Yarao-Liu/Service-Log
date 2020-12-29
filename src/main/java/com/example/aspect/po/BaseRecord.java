@@ -19,6 +19,8 @@ public class BaseRecord {
     private String details;
 
     private String describe;
-
+    /**
+     * 默认为当前时间,可以重新格式化覆盖掉
+     */
     private Date date=new Date();
 }

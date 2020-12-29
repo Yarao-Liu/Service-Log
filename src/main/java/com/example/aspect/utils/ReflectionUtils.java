@@ -21,9 +21,10 @@ import static cn.hutool.core.util.ClassUtil.getClassLoader;
  * @since jdk1.8
  */
 @Slf4j
-public class EntityUtils {
-    private EntityUtils() {
+public class ReflectionUtils {
+    private ReflectionUtils() {
     }
+
 
     /**
      * 获取包下所有类的全类名
@@ -40,17 +41,15 @@ public class EntityUtils {
         while (urls.hasMoreElements()) {
 
             URL url = urls.nextElement();
-
             if (url != null) {
                 String protocol = url.getProtocol();
-
                 if ("file".equals(protocol)) {
                     String packagePath = url.getPath().replaceAll("%20", " ");
                     addClass(classSet, packagePath, packageName);
                 } else if ("jar".equals(protocol)) {
-                    JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-                    if (jarURLConnection != null) {
-                        JarFile jarFile = jarURLConnection.getJarFile();
+                    JarURLConnection jarurlconnection = (JarURLConnection) url.openConnection();
+                    if (jarurlconnection != null) {
+                        JarFile jarFile = jarurlconnection.getJarFile();
                         if (jarFile != null) {
                             Enumeration<JarEntry> jarEntries = jarFile.entries();
                             while (jarEntries.hasMoreElements()) {
@@ -187,7 +186,7 @@ public class EntityUtils {
      */
     public static ArrayList<Object> reBuildClass(Object[] args, String packageName) {
         ArrayList<Object> objects = new ArrayList<>();
-        Set packageAllClasses = EntityUtils.getPackageAllClasses(packageName);
+        Set packageAllClasses = ReflectionUtils.getPackageAllClasses(packageName);
         Iterator iterator = packageAllClasses.iterator();
         //可以组装 describe 和 details
         for (int i = 0; i < args.length; i++) {
@@ -205,6 +204,11 @@ public class EntityUtils {
         return objects;
     }
 
+    /**
+     * 判断obj对象是否为基本数据类型或其封装对象
+     * @param obj 参数对象
+     * @return true/false
+     */
     public static boolean isPrimitive(Object obj) {
         if (obj instanceof String) {
             return true;
@@ -215,9 +219,21 @@ public class EntityUtils {
                 return false;
             }
     }
-    public static String Obj2String(Object obj) {
+
+    /**
+     * 对象转化WieString
+     * @param obj 对象
+     * @return 对象对应的字符串
+     */
+    public static String obj2String(Object obj) {
         return String.valueOf(obj);
     }
+
+    /**
+     * 对象数组转换为字符串列表
+     * @param params 参数
+     * @return ArrayList<String>
+     */
     public static ArrayList<String> param2String(Object[] params){
         ArrayList<String> paramlist = new ArrayList<>();
         for (int i=0;i<params.length;i++){
@@ -227,19 +243,22 @@ public class EntityUtils {
     }
 
     /**
+     * 对部分工具方法进行测试
      * @param args 无意义
      */
     public static void main(String[] args) {
         BaseRecord baseRecord = new BaseRecord();
         Class aClass = assertClass(baseRecord, "com.example.aspect.po");
         System.out.println(aClass);
+
+        System.out.println(aClass.getName());
         Double d = new Double(0.3);
         String a = new String("abc");
         boolean primitive = isPrimitive(a);
         System.out.println(primitive);
         int c=10;
 
-        String s = Obj2String(d);
+        String s = obj2String(d);
         System.out.println(s);
 
     }

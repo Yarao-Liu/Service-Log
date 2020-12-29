@@ -1,13 +1,19 @@
 package com.example.aspect.po;
 
+import lombok.Data;
+
 /**
+ *  业务相关的属性
  * @author Mr.Liu
  */
+@Data
 public class SysRecord extends BaseRecord {
-
-
-    //自定义属性
-    //操作时间
-    //操作者
-    //等等
+    /**
+     * 操作时间
+     */
+    private String operationTime;
+    /**
+     * 操作者
+     */
+    private String operationUser;
 }

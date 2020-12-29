@@ -1,6 +1,6 @@
 package com.example.aspect.aspect;
 
-import com.example.aspect.utils.EntityUtils;
+import com.example.aspect.utils.ReflectionUtils;
 import com.example.aspect.annotation.SysLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -20,6 +20,7 @@ import java.util.*;
 @Component
 @Order(1)
 public class SysAspect {
+
     @Pointcut(value = "@annotation(com.example.aspect.annotation.SysLog)")
     public void logAspect() { }
 
@@ -28,16 +29,20 @@ public class SysAspect {
         Object[] args = joinPoint.getArgs();
         MethodSignature signature =(MethodSignature)joinPoint.getSignature();
         String[] parameterNames = signature.getParameterNames();
+        //entity所在包的位置
         String packageName = "com.example.aspect.po";
 
-        ArrayList<Object> reBuildClass = EntityUtils.reBuildClass(args,packageName);
+        ArrayList<Object> reBuildClass = ReflectionUtils.reBuildClass(args,packageName);
+        //参数列表
         log.warn("doBefore:"+ Arrays.toString(args));
+        //变量列表
         log.warn("doBefore: "+ Arrays.toString(parameterNames));
+
         if (reBuildClass.size()>0){
             log.warn("doBefore: "+reBuildClass.toString());
-        }else if (EntityUtils.isPrimitive(args[0])){
+        }else if (ReflectionUtils.isPrimitive(args[0])){
             //字符串或基本数据类型及其封装类//理论上强制类型转换即可
-            ArrayList<String> paramString = EntityUtils.param2String(args);
+            ArrayList<String> paramString = ReflectionUtils.param2String(args);
             System.out.println(paramString);
         }else {
             log.error("UNKNOWN DATA TYPE......");
@@ -60,10 +65,12 @@ public class SysAspect {
 
     @AfterReturning("logAspect()")
     public void doAfterReturning() {
+        //TODO
     }
 
     @AfterThrowing("logAspect()")
     public void doAfterThrowing() {
+        //TODO
     }
 
     @Around("logAspect()")

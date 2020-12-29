@@ -3,6 +3,7 @@ package com.example.aspect.aspect;
 /**
  * @author Mr.Liu
  * @Description 控制器方法的类型
+ * 可适当加减
  */
 public enum MethodType {
     /**测试*/
